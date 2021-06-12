@@ -16,7 +16,7 @@
       <template #cell(actions)="row">
         <b-row>
           <b-col md="4">
-            <Update :title="'Edit'" :modal_name="'modal-'+row.item.id" :id="row.item.id"/>
+            <Update :title="'Edit'" :modal_name="'modal-'+row.item.id" :content="row.item" :id="row.item.id"/>
           </b-col>
           <b-col  md="4">
             <b-button size="sm" @click="deleteFrog(row.item.id)" class="mr-1">

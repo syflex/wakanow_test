@@ -4,6 +4,8 @@
     <b-button :size="'sm'" variant="success" v-b-modal="modal_name" class="mr-1">
         Edit
     </b-button>
+
+
   
      <!-- Info modal -->
     <b-modal :id="modal_name" :title="title === 'New' ? 'Add New Frog'  : title" hide-header-close hide-footer>
@@ -100,21 +102,22 @@ export default {
   props: {
     title: String,
     modal_name: String,
-    id: String
+    id: String,
+    content: Object
   },
   data() {
     return {
         busy: false,
         counter: 0,
         form: {
-            id: '',
-            color: '',
-            weight: '',
-            length: '',
-            width: '',
-            sex: '',
-            live_cycle: '',
-            description: ''
+            id: this.content.id ?? this.content.id,
+            color:  this.content.color ?? this.content.color,
+            weight:  this.content.weight ?? this.content.weight,
+            length:  this.content.length ?? this.content.length,
+            width:  this.content.width ?? this.content.width,
+            sex:  this.content.sex ?? this.content.sex,
+            live_cycle:  this.content.live_cycle ?? this.content.live_cycle,
+            description:  this.content.description ?? this.content.description,
         },
         weights: [{ text: 'Select Weight', value: null }, '5', '10', '15', '20', '25', '30'],
         lengths: [{ text: 'Select Length', value: null }, '1', '2', '4', '6', '8', '10'],
@@ -131,10 +134,10 @@ export default {
   methods: {
       
     async getFrog(){
-      this.isBusy = !this.isBusy
+      this.busy = !this.busy
       const req = await this.axios.get('frog/read_single.php?id=' + this.id);
       this.data = req.data
-      this.isBusy = !this.isBusy
+      this.busy = !this.busy
     },
 
     async onSubmit() {
