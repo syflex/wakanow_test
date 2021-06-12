@@ -1,89 +1,87 @@
 <template>
   <div>
 
-    <b-button size="sm" v-b-modal="modal_name" class="mr-1">
-        Edit 
+    <b-button :size="title === 'New' ? '' : 'sm'" variant="success" v-b-modal="modal_name" class="mr-1">
+        {{title === 'New' ? 'Add New Frog' : title}} 
     </b-button>
   
      <!-- Info modal -->
-    <b-modal :id="modal_name" :title="title + ' ' + modal_name" ok-only @hide="resetInfoModal">
+    <b-modal :id="modal_name" :title="title === 'New' ? 'Add New Frog'  : title" hide-header-close hide-footer>
+
      <b-form @submit="onSubmit" @reset="onReset">
-      <b-form-group
-        label="Color:"
-      >
-        <b-form-input
-          v-model="form.color"
-          type="text"
-          placeholder="Frog Color"
-          required
-        ></b-form-input>
-      </b-form-group>
 
-      <b-form-group label="Weight(g):">
-        <b-form-select
-          v-model="form.weight"
-          :options="weights"
-           placeholder="Frog Weight"
-          required
-        ></b-form-select>
-      </b-form-group>
+        <b-row class="mt-3">
+            <b-form-group
+                label="Color:"
+            >
+                <b-form-input
+                v-model="form.color"
+                type="text"
+                placeholder="Frog Color"
+                required
+                ></b-form-input>
+            </b-form-group>
 
-      <b-form-group label="Length (in):">
-        <b-form-select
-          v-model="form.length"
-          :options="lengths"
-           placeholder="Frog Length"
-          required
-        ></b-form-select>
-      </b-form-group>
+            <b-form-group label="Weight(g):" class="mt-2">
+                <b-form-select
+                type="text"
+                v-model="form.weight"
+                :options="weights"
+                placeholder="Frog Weight"
+                required
+                ></b-form-select>
+            </b-form-group>
 
-      <b-form-group label="Width(in):">
-        <b-form-select
-          v-model="form.width"
-          :options="widths"
-          placeholder="Frog Width"
-          required
-        ></b-form-select>
-      </b-form-group>
+            <b-form-group label="Length (in):" class="mt-2">
+                <b-form-select
+                v-model="form.length"
+                :options="lengths"
+                placeholder="Frog Length"
+                required
+                ></b-form-select>
+            </b-form-group>
 
-      <b-form-group label="Sex:">
-        <b-form-select
-          v-model="form.sex"
-           :options="gender"
-          placeholder="Frog Sex"
-          required
-        ></b-form-select>
-      </b-form-group>
+            <b-form-group label="Width(in):" class="mt-2">
+                <b-form-select
+                v-model="form.width"
+                :options="widths"
+                placeholder="Frog Width"
+                required
+                ></b-form-select>
+            </b-form-group>
 
-      <b-form-group label="Sex" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group
-          v-model="form.sex"
-          :aria-describedby="ariaDescribedby"
-        >
-          <b-form-checkbox value="me">Male</b-form-checkbox>
-          <b-form-checkbox value="that">Female</b-form-checkbox>
-        </b-form-checkbox-group>
-      </b-form-group>
+            <b-form-group label="Sex" v-slot="{ ariaDescribedby }" class="mt-2">
+                <b-form-checkbox-group
+                v-model="form.sex"
+                :aria-describedby="ariaDescribedby"
+                >
+                <b-form-checkbox value="me">Male</b-form-checkbox>
+                <b-form-checkbox value="that">Female</b-form-checkbox>
+                </b-form-checkbox-group>
+            </b-form-group>
 
-       <b-form-group label="Live Cycle:">
-        <b-form-select
-          v-model="form.live_cycle"
-           :options="live_cycles"
-          required
-        ></b-form-select>
-      </b-form-group>
+            <b-form-group label="Live Cycle:" class="mt-2">
+                <b-form-select
+                v-model="form.live_cycle"
+                :options="live_cycles"
+                required
+                ></b-form-select>
+            </b-form-group>
 
-      <b-form-group label="Description:">
-        <b-form-textarea
-          v-model="form.description"
-        ></b-form-textarea>
-      </b-form-group>
+            <b-form-group label="Description:" class="mt-2">
+                <b-form-textarea
+                v-model="form.description"
+                ></b-form-textarea>
+            </b-form-group>
+        </b-row>
 
-      
-
-      <b-button type="submit" variant="primary">Register Frog</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
-      <b-button type="reset" variant="danger">Cancel</b-button>
+        <b-row class="mt-2">
+            <b-col md="12">
+                <b-button type="submit" variant="primary" class="m-2">Register Frog</b-button>
+                <b-button type="reset" variant="danger" class="m-2">Reset</b-button>
+                <b-button type="reset" variant="danger" class="m-2">Cancel</b-button>
+            </b-col> 
+        </b-row>
 
     </b-form>
     

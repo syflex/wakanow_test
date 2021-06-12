@@ -1,29 +1,30 @@
 <template>
-  <div class="hello">
   <div>
-    
-    
+    <h4>{{msg}}</h4>
+
+    <b-card>
+
     <Form :title="'New'" :modal_name="'modal-0'"/>
 
-    
-    <b-table :items="items" :busy="isBusy" class="mt-3" outlined>
-      <template #table-busy>
+    <b-table striped responsive hover caption-top :items="data" :fields="fields" :busy="isBusy" class="mt-4">
+       <template #table-busy>
         <div class="text-center text-danger my-2">
           <b-spinner class="align-middle"></b-spinner>
           <strong>Loading...</strong>
         </div>
       </template>
-    </b-table>
-    <b-table striped hover :items="data" :fields="fields">
       <template #cell(actions)="row">
-        <Form :title="'Edit'" :modal_name="'modal-'+row.item.id"/>
-        {{row.item.id}}
-        <Delete :id="row.item.id"/>
+        <b-row>
+          <b-col md="4">
+            <Form :title="'Edit'" :modal_name="'modal-'+row.item.id"/>
+          </b-col>
+          <b-col  md="4">
+            <Delete :id="row.item.id"/>
+          </b-col>
+        </b-row>
       </template>
     </b-table>
-  </div>
-
-
+    </b-card>
   </div>
 </template>
 
@@ -31,7 +32,7 @@
 import Form from './Form.vue'
 import Delete from './Delete.vue'
 export default {
-  name: 'HelloWorld',
+  name: 'Home',
   props: {
     msg: String
   },
