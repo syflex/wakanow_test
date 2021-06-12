@@ -17,7 +17,7 @@ Vue.use(IconsPlugin)
 
 Vue.use(VueAxios, axios)
 
-axios.defaults.baseURL = 'http://wakanow.simononazi.com';
+axios.defaults.baseURL = 'https://wakanow.simononazi.com';
 
 new Vue({
   render: h => h(App),
