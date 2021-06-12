@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <b-container fluid>
-      <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-      <Home msg="The Frog Life"/>
+      <img alt="Vue logo" src="./assets/frog.svg" width="100px" class="">
+      <Home msg="The Frog Life Managment"/>
     </b-container>    
   </div>
 </template>
@@ -24,6 +24,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
