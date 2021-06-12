@@ -125,7 +125,7 @@ export default {
   },
 
   mounted() {
-      this.getFrogs();
+      this.getFrog();
   },
 
   methods: {
