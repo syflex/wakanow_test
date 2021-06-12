@@ -16,10 +16,12 @@
       <template #cell(actions)="row">
         <b-row>
           <b-col md="4">
-            <Form :title="'Edit'" :modal_name="'modal-'+row.item.id"/>
+            <Form :title="'Edit'" :modal_name="'modal-'+row.item.id" :id="row.item.id"/>
           </b-col>
           <b-col  md="4">
-            <Delete :id="row.item.id"/>
+            <b-button size="sm" @click="deleteFrog(row.item.id)" class="mr-1">
+                  Delete
+              </b-button>
           </b-col>
         </b-row>
       </template>
@@ -30,14 +32,15 @@
 
 <script>
 import Form from './Form.vue'
-import Delete from './Delete.vue'
+// import Delete from './Delete.vue'
 export default {
   name: 'Home',
   props: {
     msg: String
   },
   components:{
-    Form,Delete
+    Form,
+    // Delete
   },
   data() {
     return {
@@ -63,8 +66,6 @@ export default {
 
   mounted() {
     this.getFrogs();
-    // Set the initial number of items
-      this.totalRows = this.data.length
   },
 
   computed: {
@@ -79,7 +80,6 @@ export default {
     },
 
   methods: {
-
     async getFrogs(){
       this.isBusy = !this.isBusy
       const req = await this.axios.get('frog/read.php');
@@ -87,16 +87,14 @@ export default {
       this.isBusy = !this.isBusy
     },
 
-    info(item, index, button) {
-        this.infoModal.title = `Row index: ${index}`
-        this.infoModal.content = JSON.stringify(item, null, 2)
-        this.$root.$emit('bv::show::modal', this.infoModal.id, button)
-    },
-
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length
-      this.currentPage = 1
+    async deleteFrog(id){            
+        try {
+          this.axios.post('frog/delete.php', {id: id})
+          alert('Deleted successfully'); 
+          this.getFrogs();
+        } catch (error) {
+            alert("An error accured: Kindly try again")
+        }
     }
 
   },

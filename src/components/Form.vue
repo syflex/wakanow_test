@@ -76,42 +76,43 @@
         </b-row>
 
         <b-row class="mt-2">
+             
+    
             <b-col md="12">
-                <b-button type="submit" variant="primary" class="m-2">Register Frog</b-button>
-                <b-button type="reset" variant="danger" class="m-2">Reset</b-button>
+                <b-overlay :show="busy" rounded opacity="0.6"
+                    spinner-small spinner-variant="primary"
+                    class="d-inline-block"
+                >
+                    <b-button type="submit" variant="primary" :disabled="busy" class="m-2">{{title === "New" ? 'Add ' : "Edit "}}Frog</b-button>
+                </b-overlay>
                 <b-button type="reset" variant="danger" class="m-2">Cancel</b-button>
             </b-col> 
         </b-row>
 
     </b-form>
-    
     </b-modal>
-
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'Form',
   props: {
     title: String,
     modal_name: String
   },
   data() {
     return {
-      infoModal: {
-        id: 'info-modal',
-        title: '',
-        content: ''
-      },
-      form: {
-          color: '',
-          weight: '',
-          length: '',
-          width: '',
-          sex: '',
-          live_cycle: '',
-          description: ''
+        busy: false,
+        counter: 0,
+        form: {
+            color: '',
+            weight: '',
+            length: '',
+            width: '',
+            sex: '',
+            live_cycle: '',
+            description: ''
         },
         weights: [{ text: 'Select Weight', value: null }, '5', '10', '15', '20', '25', '30'],
         lengths: [{ text: 'Select Length', value: null }, '1', '2', '4', '6', '8', '10'],
@@ -128,26 +129,31 @@ export default {
         this.infoModal.content = JSON.stringify(item, null, 2)
     },
 
-    async onSubmit(event) {
-        event.preventDefault()
-        const req = await this.axios.post('frog/create.php', this.form)
-        console.log(req);
+    async onSubmit() {
+        this.busy = true
+        try {
+            const req = await this.axios.post('frog/create.php', this.form)
+            console.log(req);
+            this.busy = false
+           this.$router.go()
+        } catch (error) {
+            this.busy = false
+        }
     },
 
       onReset(event) {
         event.preventDefault()
         // Reset our form values
-        this.form.email = ''
-        this.form.name = ''
-        this.form.food = null
-        this.form.checked = []
+        this.form.color = ''
+        this.form.weight = ''
+        this.form.length = ''
+        this.form.sex = ''
         // Trick to reset/clear native browser form validation state
         this.show = false
         this.$nextTick(() => {
           this.show = true
         })
-      }
-
+      },
   },
 }
 </script>
