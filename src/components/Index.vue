@@ -3,7 +3,7 @@
   <div>
     
     
-    <Form />
+    <Form :title="'New'" :modal_name="'modal-0'"/>
 
     
     <b-table :items="items" :busy="isBusy" class="mt-3" outlined>
@@ -16,7 +16,7 @@
     </b-table>
     <b-table striped hover :items="data" :fields="fields">
       <template #cell(actions)="row">
-        <Form />
+        <Form :title="'Edit'" :modal_name="'modal-'+row.item.id"/>
         {{row.item.id}}
         <Delete :id="row.item.id"/>
       </template>

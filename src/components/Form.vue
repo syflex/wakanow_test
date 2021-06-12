@@ -1,12 +1,12 @@
 <template>
   <div>
 
-    <b-button size="sm" v-b-modal.my-modal class="mr-1">
-        Edit
+    <b-button size="sm" v-b-modal="modal_name" class="mr-1">
+        Edit 
     </b-button>
   
      <!-- Info modal -->
-    <b-modal id="my-modal" :title="'register modal'" ok-only @hide="resetInfoModal">
+    <b-modal :id="modal_name" :title="title + ' ' + modal_name" ok-only @hide="resetInfoModal">
      <b-form @submit="onSubmit" @reset="onReset">
       <b-form-group
         label="Color:"
@@ -96,7 +96,8 @@
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    title: String,
+    modal_name: String
   },
   data() {
     return {
