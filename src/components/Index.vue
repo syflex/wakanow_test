@@ -40,7 +40,7 @@ export default {
   },
   components:{
     Form,
-    // Delete
+    Update
   },
   data() {
     return {
