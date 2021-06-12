@@ -16,7 +16,7 @@
       <template #cell(actions)="row">
         <b-row>
           <b-col md="4">
-            <Form :title="'Edit'" :modal_name="'modal-'+row.item.id" :id="row.item.id"/>
+            <Update :title="'Edit'" :modal_name="'modal-'+row.item.id" :id="row.item.id"/>
           </b-col>
           <b-col  md="4">
             <b-button size="sm" @click="deleteFrog(row.item.id)" class="mr-1">
@@ -32,7 +32,7 @@
 
 <script>
 import Form from './Form.vue'
-// import Delete from './Delete.vue'
+import Update from './Update.vue'
 export default {
   name: 'Home',
   props: {

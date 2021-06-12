@@ -1,8 +1,8 @@
 <template>
   <div>
 
-    <b-button :size="title === 'New' ? '' : 'sm'" variant="success" v-b-modal="modal_name" class="mr-1">
-        {{title === 'New' ? 'Add New Frog' : title}} 
+    <b-button :size="'sm'" variant="success" v-b-modal="modal_name" class="mr-1">
+        Edit
     </b-button>
   
      <!-- Info modal -->
@@ -99,13 +99,15 @@ export default {
   name: 'Form',
   props: {
     title: String,
-    modal_name: String
+    modal_name: String,
+    id: String
   },
   data() {
     return {
         busy: false,
         counter: 0,
         form: {
+            id: '',
             color: '',
             weight: '',
             length: '',
@@ -122,14 +124,26 @@ export default {
     }
   },
 
+  mounted() {
+      this.getFrogs();
+  },
+
   methods: {
+      
+    async getFrog(){
+      this.isBusy = !this.isBusy
+      const req = await this.axios.get('frog/read_single.php?id=' + this.id);
+      this.data = req.data
+      this.isBusy = !this.isBusy
+    },
+
     async onSubmit() {
         this.busy = true
         try {
-            const req = await this.axios.post('frog/create.php', this.form)
+            const req = await this.axios.post('frog/update.php', this.form)
             console.log(req);
             this.busy = false
-           this.$router.go()
+            this.$router.go()
         } catch (error) {
             this.busy = false
         }

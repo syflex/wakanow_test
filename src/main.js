@@ -18,7 +18,7 @@ Vue.use(IconsPlugin)
 Vue.use(VueAxios, axios)
 
 
-axios.defaults.baseURL = 'https://wakanow.simononazi.com/api/';
+axios.defaults.baseURL = 'https://wakanow.simononazi.com';
 // axios.defaults.baseURL = 'http://wakanow_test_api.test/api';
 
 
