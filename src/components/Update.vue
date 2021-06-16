@@ -10,9 +10,21 @@
      <!-- Info modal -->
     <b-modal :id="modal_name" :title="title === 'New' ? 'Add New Frog'  : title" hide-header-close hide-footer>
 
-     <b-form @submit="onSubmit" @reset="onReset">
+     <b-form>
 
         <b-row class="mt-3">
+            <b-form-group
+                label="Number:"
+            >
+                <b-form-input
+                v-model="form.number"
+                type="text"
+                placeholder="Frog Number"
+                required
+                readonly
+                ></b-form-input>
+            </b-form-group>
+
             <b-form-group
                 label="Color:"
             >
@@ -21,6 +33,7 @@
                 type="text"
                 placeholder="Frog Color"
                 required
+                readonly
                 ></b-form-input>
             </b-form-group>
 
@@ -85,9 +98,9 @@
                     spinner-small spinner-variant="primary"
                     class="d-inline-block"
                 >
-                    <b-button type="submit" variant="primary" :disabled="busy" class="m-2">{{title === "New" ? 'Add ' : "Edit "}}Frog</b-button>
+                    <b-button @click="updateFrog()" variant="primary" :disabled="busy" class="m-2">{{title === "New" ? 'Add ' : "Edit "}}Frog</b-button>
                 </b-overlay>
-                <b-button type="reset" variant="danger" class="m-2">Cancel</b-button>
+                <b-button @click="onReset()" variant="danger" class="m-2">Cancel</b-button>
             </b-col> 
         </b-row>
 
@@ -110,14 +123,15 @@ export default {
         busy: false,
         counter: 0,
         form: {
-            id: this.content.id ?? this.content.id,
-            color:  this.content.color ?? this.content.color,
-            weight:  this.content.weight ?? this.content.weight,
-            length:  this.content.length ?? this.content.length,
-            width:  this.content.width ?? this.content.width,
-            sex:  this.content.sex ?? this.content.sex,
-            live_cycle:  this.content.live_cycle ?? this.content.live_cycle,
-            description:  this.content.description ?? this.content.description,
+            id: this.content.id ?? '',
+            number:  this.content.number ?? '',
+            color:  this.content.color ?? '',
+            weight:  this.content.weight ?? '',
+            length:  this.content.length ?? '',
+            width:  this.content.width ?? '',
+            sex:  this.content.sex ?? '',
+            live_cycle:  this.content.live_cycle ?? '',
+            description:  this.content.description ?? '',
         },
         weights: [{ text: 'Select Weight', value: null }, '5', '10', '15', '20', '25', '30'],
         lengths: [{ text: 'Select Length', value: null }, '1', '2', '4', '6', '8', '10'],
@@ -127,43 +141,31 @@ export default {
     }
   },
 
-  mounted() {
-      this.getFrog();
-  },
-
   methods: {
-      
-    async getFrog(){
-      this.busy = !this.busy
-      const req = await this.axios.get('frog/read_single.php?id=' + this.id);
-      this.data = req.data
-      this.busy = !this.busy
-    },
 
-    async onSubmit() {
+    async updateFrog() {
         this.busy = true
         try {
-            const req = await this.axios.post('frog/update.php', this.form)
-            console.log(req);
+            await this.axios.post('frog/update.php', this.form)            
             this.busy = false
-            this.$router.go()
+            this.onReset()
         } catch (error) {
             this.busy = false
         }
     },
 
-      onReset(event) {
-        event.preventDefault()
+      onReset() {
         // Reset our form values
-        this.form.color = ''
-        this.form.weight = ''
-        this.form.length = ''
-        this.form.sex = ''
-        // Trick to reset/clear native browser form validation state
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
+        this.busy = false
+        this.form.number = '';
+        this.form.color = '';
+        this.form.weight = '';
+        this.form.length = '';
+        this.form.sex = '';
+        this.form.live_cycle = '';
+        this.form.description = '';
+        this.$bvModal.hide(this.modal_name);
+        location.reload(); 
       },
   },
 }

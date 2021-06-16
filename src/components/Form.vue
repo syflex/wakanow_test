@@ -8,9 +8,20 @@
      <!-- Info modal -->
     <b-modal :id="modal_name" :title="title === 'New' ? 'Add New Frog'  : title" hide-header-close hide-footer>
 
-     <b-form @submit="onSubmit" @reset="onReset">
+     <b-form>
 
         <b-row class="mt-3">
+            <b-form-group
+                label="Number(eg 0000):"
+            >
+                <b-form-input
+                v-model="form.number"
+                type="text"
+                placeholder="Frog Number(0000)"
+                required
+                ></b-form-input>
+            </b-form-group>
+
             <b-form-group
                 label="Color:"
             >
@@ -50,14 +61,9 @@
                 ></b-form-select>
             </b-form-group>
 
-            <b-form-group label="Sex" v-slot="{ ariaDescribedby }" class="mt-2">
-                <b-form-checkbox-group
-                v-model="form.sex"
-                :aria-describedby="ariaDescribedby"
-                >
-                <b-form-checkbox value="me">Male</b-form-checkbox>
-                <b-form-checkbox value="that">Female</b-form-checkbox>
-                </b-form-checkbox-group>
+            <b-form-group label="Individual radios" v-slot="{ ariaDescribedby }">
+                <b-form-radio v-model="form.sex" :aria-describedby="ariaDescribedby" value="Male">Male</b-form-radio>
+                <b-form-radio v-model="form.sex" :aria-describedby="ariaDescribedby" value="Female">Female</b-form-radio>
             </b-form-group>
 
             <b-form-group label="Live Cycle:" class="mt-2">
@@ -83,9 +89,9 @@
                     spinner-small spinner-variant="primary"
                     class="d-inline-block"
                 >
-                    <b-button type="submit" variant="primary" :disabled="busy" class="m-2">{{title === "New" ? 'Add ' : "Edit "}}Frog</b-button>
+                    <b-button @click="saveFrog()" variant="primary" :disabled="busy" class="m-2">{{title === "New" ? 'Add ' : "Edit "}}Frog</b-button>
                 </b-overlay>
-                <b-button type="reset" variant="danger" class="m-2">Cancel</b-button>
+                <b-button @click="onReset()" variant="danger" class="m-2">Cancel</b-button>
             </b-col> 
         </b-row>
 
@@ -106,6 +112,7 @@ export default {
         busy: false,
         counter: 0,
         form: {
+            number: '',
             color: '',
             weight: '',
             length: '',
@@ -123,30 +130,32 @@ export default {
   },
 
   methods: {
-    async onSubmit() {
+    async saveFrog() {
         this.busy = true
         try {
             const req = await this.axios.post('frog/create.php', this.form)
-            console.log(req);
-            this.busy = false
-           this.$router.go()
+            const res = req.data
+            if (res.message == 'Frog Registered') {
+                console.log(res);
+            }
+            this.busy = false;
+            this.onReset();
         } catch (error) {
             this.busy = false
         }
     },
 
-      onReset(event) {
-        event.preventDefault()
+      onReset() {
         // Reset our form values
+        this.form.number = ''
         this.form.color = ''
         this.form.weight = ''
         this.form.length = ''
         this.form.sex = ''
-        // Trick to reset/clear native browser form validation state
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
+        this.form.live_cycle = ''
+        this.form.description = ''
+        this.$bvModal.hide(this.modal_name)
+        location.reload(); 
       },
   },
 }

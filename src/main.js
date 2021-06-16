@@ -3,6 +3,7 @@ import App from './App.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueRouter from 'vue-router'
 
 Vue.config.productionTip = false
 
@@ -16,9 +17,10 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 Vue.use(VueAxios, axios)
+Vue.use(VueRouter)
 
 
-// axios.defaults.baseURL = 'https://wakanow.simononazi.com';
+// axios.defaults.baseURL = 'https://wakanow.simononazi.com/';
 axios.defaults.baseURL = 'http://wakanow_test_api.test/api';
 
 
