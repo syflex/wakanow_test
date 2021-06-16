@@ -16,10 +16,10 @@
       <template #cell(actions)="row">
         <b-row>
           <b-col md="4">
-            <Form :title="'Edit'" :modal_name="'modal-'+row.item.id" :id="row.item.id"/>
+            <Update :title="'Edit'" :modal_name="'modal-'+row.item.id" :content="row.item" :id="row.item.id"/>
           </b-col>
           <b-col  md="4">
-            <b-button size="sm" @click="deleteFrog(row.item.id)" class="mr-1">
+            <b-button size="sm" variant="danger" @click="deleteFrog(row.item.id)" class="mr-1">
                   Delete
               </b-button>
           </b-col>
@@ -32,7 +32,7 @@
 
 <script>
 import Form from './Form.vue'
-// import Delete from './Delete.vue'
+import Update from './Update.vue'
 export default {
   name: 'Home',
   props: {
@@ -40,18 +40,13 @@ export default {
   },
   components:{
     Form,
-    // Delete
+    Update
   },
   data() {
     return {
       isBusy: false,
-      fields: ['color','weight','length','width','sex','live_cycle','description','actions'],
+      fields: ['number','color','weight','length','width','sex','live_cycle','description','actions'],
       data:[],
-      infoModal: {
-        id: 'info-modal',
-        title: '',
-        content: ''
-      },
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
@@ -92,6 +87,9 @@ export default {
           this.axios.post('frog/delete.php', {id: id})
           alert('Deleted successfully'); 
           this.getFrogs();
+          setTimeout(() => {
+            
+          }, 5000);
         } catch (error) {
             alert("An error accured: Kindly try again")
         }

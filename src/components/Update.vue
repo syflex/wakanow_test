@@ -1,9 +1,11 @@
 <template>
   <div>
 
-    <b-button :size="title === 'New' ? '' : 'sm'" variant="success" v-b-modal="modal_name" class="mr-1">
-        {{title === 'New' ? 'Add New Frog' : title}} 
+    <b-button :size="'sm'" variant="success" v-b-modal="modal_name" class="mr-1">
+        Edit
     </b-button>
+
+
   
      <!-- Info modal -->
     <b-modal :id="modal_name" :title="title === 'New' ? 'Add New Frog'  : title" hide-header-close hide-footer>
@@ -12,13 +14,14 @@
 
         <b-row class="mt-3">
             <b-form-group
-                label="Number(eg 0000):"
+                label="Number:"
             >
                 <b-form-input
                 v-model="form.number"
                 type="text"
-                placeholder="Frog Number(0000)"
+                placeholder="Frog Number"
                 required
+                readonly
                 ></b-form-input>
             </b-form-group>
 
@@ -30,6 +33,7 @@
                 type="text"
                 placeholder="Frog Color"
                 required
+                readonly
                 ></b-form-input>
             </b-form-group>
 
@@ -61,9 +65,14 @@
                 ></b-form-select>
             </b-form-group>
 
-            <b-form-group label="Individual radios" v-slot="{ ariaDescribedby }">
-                <b-form-radio v-model="form.sex" :aria-describedby="ariaDescribedby" value="Male">Male</b-form-radio>
-                <b-form-radio v-model="form.sex" :aria-describedby="ariaDescribedby" value="Female">Female</b-form-radio>
+            <b-form-group label="Sex" v-slot="{ ariaDescribedby }" class="mt-2">
+                <b-form-checkbox-group
+                v-model="form.sex"
+                :aria-describedby="ariaDescribedby"
+                >
+                <b-form-checkbox value="me">Male</b-form-checkbox>
+                <b-form-checkbox value="that">Female</b-form-checkbox>
+                </b-form-checkbox-group>
             </b-form-group>
 
             <b-form-group label="Live Cycle:" class="mt-2">
@@ -89,7 +98,7 @@
                     spinner-small spinner-variant="primary"
                     class="d-inline-block"
                 >
-                    <b-button @click="saveFrog()" variant="primary" :disabled="busy" class="m-2">{{title === "New" ? 'Add ' : "Edit "}}Frog</b-button>
+                    <b-button @click="updateFrog()" variant="primary" :disabled="busy" class="m-2">{{title === "New" ? 'Add ' : "Edit "}}Frog</b-button>
                 </b-overlay>
                 <b-button @click="onReset()" variant="danger" class="m-2">Cancel</b-button>
             </b-col> 
@@ -105,21 +114,24 @@ export default {
   name: 'Form',
   props: {
     title: String,
-    modal_name: String
+    modal_name: String,
+    id: String,
+    content: Object
   },
   data() {
     return {
         busy: false,
         counter: 0,
         form: {
-            number: '',
-            color: '',
-            weight: '',
-            length: '',
-            width: '',
-            sex: '',
-            live_cycle: '',
-            description: ''
+            id: this.content.id ?? '',
+            number:  this.content.number ?? '',
+            color:  this.content.color ?? '',
+            weight:  this.content.weight ?? '',
+            length:  this.content.length ?? '',
+            width:  this.content.width ?? '',
+            sex:  this.content.sex ?? '',
+            live_cycle:  this.content.live_cycle ?? '',
+            description:  this.content.description ?? '',
         },
         weights: [{ text: 'Select Weight', value: null }, '5', '10', '15', '20', '25', '30'],
         lengths: [{ text: 'Select Length', value: null }, '1', '2', '4', '6', '8', '10'],
@@ -130,16 +142,13 @@ export default {
   },
 
   methods: {
-    async saveFrog() {
+
+    async updateFrog() {
         this.busy = true
         try {
-            const req = await this.axios.post('frog/create.php', this.form)
-            const res = req.data
-            if (res.message == 'Frog Registered') {
-                console.log(res);
-            }
-            this.busy = false;
-            this.onReset();
+            await this.axios.post('frog/update.php', this.form)            
+            this.busy = false
+            this.onReset()
         } catch (error) {
             this.busy = false
         }
@@ -147,14 +156,15 @@ export default {
 
       onReset() {
         // Reset our form values
-        this.form.number = ''
-        this.form.color = ''
-        this.form.weight = ''
-        this.form.length = ''
-        this.form.sex = ''
-        this.form.live_cycle = ''
-        this.form.description = ''
-        this.$bvModal.hide(this.modal_name)
+        this.busy = false
+        this.form.number = '';
+        this.form.color = '';
+        this.form.weight = '';
+        this.form.length = '';
+        this.form.sex = '';
+        this.form.live_cycle = '';
+        this.form.description = '';
+        this.$bvModal.hide(this.modal_name);
         location.reload(); 
       },
   },
